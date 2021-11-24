@@ -30,6 +30,7 @@ exports.user_create_post = function(req, res) {
     res.send('NOT IMPLEMENTED: User create POST');
 };
 
+//
 exports.user_login_get = function(req, res) {
     res.render("login_user.html")
 };
