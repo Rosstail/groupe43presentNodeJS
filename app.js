@@ -10,6 +10,14 @@ const port = config.webPort
 const host = config.webHost
 const protocol = config.webProtocol
 
+// Connection BDD
+mongoose.connect(config.db_address, {useNewUrlParser: true, useUnifiedTopology: true});
+db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("Connected to Mongoose")
+});
+
 nunjucks.configure("views", {
   autoescape: true,
   express: app
