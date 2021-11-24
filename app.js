@@ -10,27 +10,17 @@ const port = config.webPort
 const host = config.webHost
 const protocol = config.webProtocol
 
+// Connection BDD
+mongoose.connect(config.db_address, {useNewUrlParser: true, useUnifiedTopology: true});
+db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("Connected to Mongoose")
+});
+
 nunjucks.configure("views", {
   autoescape: true,
   express: app
-})
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
-app.listen(port, host, () => {
-  console.log(`Example app listening at ${protocol}://${host}:${port}`)
-})
-
-// Home page route.
-app.get('/test', function (req, res) {
-    res.send('Wiki home page');
-})
-
-// About page route.
-app.get('/about', function (req, res) {
-  res.send('About this wiki');
 })
 
 //app.use('/', indexRouter);
