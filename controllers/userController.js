@@ -1,12 +1,6 @@
 var User = require('../models/user');
 const path = require('path');
-
-exports.checkUserInfo = function (req, res) {
-    if (req.body.username == "jcvd" && req.body.password == "jeremy")
-        console.log(req.body + "Vous avez réussi à vous log");
-    else
-        res.redirect('./login')
-}
+const crypto = require('crypto')
 
 //
 exports.index = function (req, res){
@@ -26,19 +20,37 @@ exports.user_detail = function(req, res) {
 // Display User create form on GET.
 exports.user_create_get = function(req, res) {
     res.render("create_user.html")
-
-    let test = "ABCdef#1234"
-    if (test.match("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$")) {
-        console.log("YEEES !")
-    } else {
-        console.log("NOOOOOO")
-    }
     //res.sendFile('/views/create_user.html', {root: path.dirname(__dirname)});
 };
 
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: User create POST');
+    const md5sum = crypto.createHash('md5');
+
+    let name = req.body.name
+    let firstname = req.body.firstname
+    let email = req.body.email
+    let password = req.body.password
+    let confirmpassword = req.body.confirmpassword
+
+    console.log(name + " " + firstname + " " + email + " " + password + " " + confirmpassword)
+    
+    if (password.match("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$")) {
+        console.log("Respect the regex !")
+    } else {
+        console.log("Does not respect the regex")
+    }
+
+    if (password === confirmpassword) {
+        console.log("Passwords are the same")
+    } else {
+        console.log("Passwords are not the same")
+    }
+
+    let hashpassword = md5sum.update(password).digest('hex')
+
+    console.log(hashpassword)
+    res.render("create_user.html")
 };
 
 //
@@ -47,15 +59,14 @@ exports.user_login_get = function(req, res) {
 };
 
 exports.user_login_post = function(req, res) {
-    //console.log(req)
-    //requestdb()
-    //console.log(req.body.id)
-    res.send('NOT IMPLEMENTED: User login POST');
+    console.log(req.body)
+    if (req.body.email == "jcvd@mail.fr" && req.body.password == "jeremy")
+        console.log(req.body + "Vous avez réussi à vous log");
+    else {
+        console.log("No")
+        res.redirect('./login')
+    }
 };
-
-async function requestdb() {
-  console.log("TEST")
-}
 
 // Display User delete form on GET.
 exports.user_delete_get = function(req, res) {
