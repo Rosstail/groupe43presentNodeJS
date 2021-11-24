@@ -15,26 +15,12 @@ nunjucks.configure("views", {
   express: app
 })
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
 app.listen(port, host, () => {
-  console.log(`Example app listening at ${protocol}://${host}:${port}`)
-})
+  console.log(`Server running at http://${host}:${port}/`);
+});
 
-// Home page route.
-app.get('/test', function (req, res) {
-    res.send('Wiki home page');
-})
-
-// About page route.
-app.get('/about', function (req, res) {
-  res.send('About this wiki');
-})
-
-//app.use('/', indexRouter);
-app.use('/user', userRouter);
+app.use('/', userRouter);
+//app.use('/user', userRouter);
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded());
@@ -44,5 +30,12 @@ app.use(express.json());
 
 //app.get('/user', userRouter);
 //app.use('/catalog', catalogRouter);  // Add catalog routes to middleware chain.
+
+mongoose.connect(config.db_address, {useNewUrlParser: true, useUnifiedTopology: true});
+db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("Connected to Mongoose")
+});
 
 module.exports = app;

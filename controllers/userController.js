@@ -1,6 +1,11 @@
 var User = require('../models/user');
 const path = require('path');
 
+//
+exports.index = function (req, res){
+    res.render("index.html")
+}
+
 // Display list of all Users.
 exports.user_list = function(req, res) {
     res.send('NOT IMPLEMENTED: User list');
@@ -23,6 +28,17 @@ exports.user_create_post = function(req, res) {
     //requestdb()
     //console.log(req.body.id)
     res.send('NOT IMPLEMENTED: User create POST');
+};
+
+exports.user_login_get = function(req, res) {
+    res.render("login_user.html")
+};
+
+exports.user_login_post = function(req, res) {
+    //console.log(req)
+    //requestdb()
+    //console.log(req.body.id)
+    res.send('NOT IMPLEMENTED: User login POST');
 };
 
 async function requestdb() {
