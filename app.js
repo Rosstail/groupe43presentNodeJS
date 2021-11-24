@@ -39,11 +39,4 @@ app.use(express.json());
 //app.get('/user', userRouter);
 //app.use('/catalog', catalogRouter);  // Add catalog routes to middleware chain.
 
-mongoose.connect(config.db_address, {useNewUrlParser: true, useUnifiedTopology: true});
-db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log("Connected to Mongoose")
-});
-
 module.exports = app;
