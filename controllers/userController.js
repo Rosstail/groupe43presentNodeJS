@@ -1,6 +1,13 @@
 var User = require('../models/user');
 const path = require('path');
 
+exports.checkUserInfo = function (req, res) {
+    if (req.body.username == "jcvd" && req.body.password == "jeremy")
+        console.log(req.body + "Vous avez réussi à vous log");
+    else
+        res.redirect('./login')
+}
+
 //
 exports.index = function (req, res){
     res.render("index.html")
