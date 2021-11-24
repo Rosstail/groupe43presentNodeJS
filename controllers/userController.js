@@ -1,6 +1,11 @@
 var User = require('../models/user');
 const path = require('path');
 
+//
+exports.index = function (req, res){
+    res.render("index.html")
+}
+
 // Display list of all Users.
 exports.user_list = function(req, res) {
     res.send('NOT IMPLEMENTED: User list');
@@ -27,7 +32,6 @@ exports.user_create_get = function(req, res) {
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
     res.send('NOT IMPLEMENTED: User create POST');
-
 };
 
 // Display User delete form on GET.

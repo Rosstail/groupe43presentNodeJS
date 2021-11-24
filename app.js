@@ -8,6 +8,14 @@ const port = config.webPort
 const host = config.webHost
 const protocol = config.webProtocol
 
+// Connection BDD
+mongoose.connect(config.db_address, {useNewUrlParser: true, useUnifiedTopology: true});
+db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("Connected to Mongoose")
+});
+
 nunjucks.configure("views", {
   autoescape: true,
   express: app
@@ -18,15 +26,20 @@ app.use(express.json());
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({express: true}));
-
 app.listen(port, host, () => {
-  console.log(`Example app listening at ${protocol}://${host}:${port}`)
-})
+  console.log(`Server running at http://${host}:${port}/`);
+});
 
-//app.use('/', indexRouter);
-app.use('/user', userRouter);
+app.use('/', userRouter);
 
 //app.get('/user', userRouter);
 //app.use('/catalog', catalogRouter);  // Add catalog routes to middleware chain.
+
+mongoose.connect(config.db_address, {useNewUrlParser: true, useUnifiedTopology: true});
+db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("Connected to Mongoose")
+});
 
 module.exports = app;
