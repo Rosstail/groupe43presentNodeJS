@@ -1,6 +1,13 @@
 var User = require('../models/user');
 const path = require('path');
 
+exports.checkUserInfo = function (req, res) {
+    if (req.body.username == "jcvd" && req.body.password == "jeremy")
+        console.log(req.body + "Vous avez réussi à vous log");
+    else
+        res.redirect('./login')
+}
+
 //
 exports.index = function (req, res){
     res.render("index.html")
@@ -19,14 +26,18 @@ exports.user_detail = function(req, res) {
 // Display User create form on GET.
 exports.user_create_get = function(req, res) {
     res.render("create_user.html")
+
+    let test = "ABCdef#1234"
+    if (test.match("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$")) {
+        console.log("YEEES !")
+    } else {
+        console.log("NOOOOOO")
+    }
     //res.sendFile('/views/create_user.html', {root: path.dirname(__dirname)});
 };
 
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
-    //console.log(req)
-    //requestdb()
-    //console.log(req.body.id)
     res.send('NOT IMPLEMENTED: User create POST');
 };
 
