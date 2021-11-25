@@ -1,8 +1,12 @@
-var User = require('../models/user');
 const path = require('path');
 const crypto = require('crypto')
 
-//
+const users = require('../models/user');
+const mysql = require('mysql');
+const app = require('../app')
+const config = require('../config');
+
+
 exports.index = function (req, res){
     res.render("index.html")
 }
@@ -23,8 +27,21 @@ exports.user_create_get = function(req, res) {
     //res.sendFile('/views/create_user.html', {root: path.dirname(__dirname)});
 };
 
+    
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
+
+    // Connection BDD
+    const co = mysql.createConnection({
+        host: config.address_db,
+        user: config.username_db,
+        password: config.password_db
+    });
+    
+    co.connect(function(err) {
+        if (err) throw err;
+        console.log("Connecté à la base de données MySQL!");
+    })
 
     let name = req.body.name
     let firstname = req.body.firstname
@@ -34,27 +51,37 @@ exports.user_create_post = function(req, res) {
 
     console.log(name + " " + firstname + " " + email + " " + password + " " + confirmpassword)
     
-    if (password.match("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$")) {
-        console.log("Respect the regex !")
-    } else {
-        console.log("Does not respect the regex")
-    }
 
-    if (password === confirmpassword) {
+    if (password == confirmpassword) {
+        if (password.match("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$")) {            
+            let hashpassword = hash(password)
+            co.query("INSERT INTO itescia.users (firstname, lastname, email, password) VALUES ('"+ firstname +"', '"+ name +"', '"+ email +"', '"+ hashpassword +"')", function(err, result){
+                if(err){
+                    if (err.code == "ER_DUP_ENTRY"){                       
+                        console.log('AJOUT ERREUR EMAIL ALREADY EXIT')
+                        res.redirect('./create')
+                    }               
+                    else{
+                        throw err
+                    }   
+
+                }else{
+                    console.log("User created : ");
+                    res.redirect('./login')
+                }                
+                    
+            })
+            console.log("The passwrd respect the regex !")
+        } 
+        else
+            console.log("Does not respect the regex")
         console.log("Passwords are the same")
-    } else {
+    } 
+    else
         console.log("Passwords are not the same")
-    }
-
-    
-    let hashpassword = test(password)
-    //let hashpassword = md5sum.update(password).digest('hex')
-
-    console.log("MDP Hash " + hashpassword)
-    res.render("create_user.html")
 };
 
-function test(message) {
+function hash(message) {
     return crypto.createHash("sha256").update(message).digest("hex")
 }
 
@@ -64,13 +91,24 @@ exports.user_login_get = function(req, res) {
 };
 
 exports.user_login_post = function(req, res) {
-    console.log(req.body)
-    if (req.body.email == "jcvd@mail.fr" && req.body.password == "jeremy")
-        console.log(req.body + "Vous avez réussi à vous log");
-    else {
-        console.log("No")
-        res.redirect('./login')
-    }
+    let email = req.body.email
+    let password = req.body.password
+    
+    const co = mysql.createConnection({
+        host: config.address_db,
+        user: config.username_db,
+        password: config.password_db
+    });
+      
+    co.query("SELECT email, password FROM itescia.users WHERE email = '" + email + "'", function (err, result) {
+        if (err) throw err;
+        if(hash(password) == result[0].password){
+            console.log('user logged')
+            res.redirect('./chat')
+        }else{
+            console.log('error')
+        }
+    });
 };
 
 // Display User delete form on GET.
