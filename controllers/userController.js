@@ -4,9 +4,12 @@ let http = require('http').Server(exports);
 let io = require('socket.io')(http);
 
 const users = require('../models/user');
+const db_handler = require('../db_handler')
 const mysql = require('mysql');
 const app = require('../app')
 const config = require('../config');
+
+const connexion = db_handler.connexion
 
 
 exports.index = function (req, res){
@@ -32,19 +35,6 @@ exports.user_create_get = function(req, res) {
     
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
-
-    // Connection BDD
-    const co = mysql.createConnection({
-        host: config.address_db,
-        user: config.username_db,
-        password: config.password_db
-    });
-    
-    co.connect(function(err) {
-        if (err) throw err;
-        console.log("Connecté à la base de données MySQL!");
-    })
-
     let name = req.body.name
     let firstname = req.body.firstname
     let email = req.body.email
@@ -56,7 +46,7 @@ exports.user_create_post = function(req, res) {
     if (password == confirmpassword) {
         if (password.match("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$")) {            
             let hashpassword = hash(password)
-            co.query("INSERT INTO itescia.users (firstname, lastname, email, password) VALUES ('"+ firstname +"', '"+ name +"', '"+ email +"', '"+ hashpassword +"')", function(err, result){
+            connexion.query("INSERT INTO itescia.users (firstname, lastname, email, password) VALUES ('"+ firstname +"', '"+ name +"', '"+ email +"', '"+ hashpassword +"')", function(err, result){
                 if(err){
                     if (err.code == "ER_DUP_ENTRY"){                       
                         console.log('AJOUT ERREUR EMAIL ALREADY EXIT')
@@ -119,14 +109,8 @@ exports.user_login_get = function(req, res) {
 exports.user_login_post = function(req, res) {
     let email = req.body.email
     let password = req.body.password
-    
-    const co = mysql.createConnection({
-        host: config.address_db,
-        user: config.username_db,
-        password: config.password_db
-    });
       
-    co.query("SELECT email, password FROM itescia.users WHERE email = '" + email + "'", function (err, result) {
+    connexion.query("SELECT email, password FROM itescia.users WHERE email = '" + email + "'", function (err, result) {
         if (err) throw err;
         if(hash(password) == result[0].password){
             console.log('user logged')
