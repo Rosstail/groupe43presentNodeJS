@@ -6,7 +6,7 @@ var io = require('socket.io')(http);
 /**
  * Gestion des requêtes HTTP des utilisateurs en leur renvoyant les fichiers du dossier 'public'
  */
-app.use("/chat", express.static(__dirname + "/views/chat.html"));
+app.use("/", express.static("./views/chat.html"));
 
 io.on('connection', function (socket) {
   /**

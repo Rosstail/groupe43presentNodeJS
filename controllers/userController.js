@@ -1,16 +1,14 @@
 const path = require('path');
 const crypto = require('crypto')
-let http = require('../http').Server(exports);
+const app = require("../app")
+let http = require('http').Server(app);
 let io = require('socket.io')(http);
-
 const users = require('../models/user');
 const db_handler = require('../db_handler')
 const mysql = require('mysql');
-const app = require('../app')
 const config = require('../config');
 
 const connexion = db_handler.connexion
-
 
 exports.index = function (req, res){
     res.render("index.html")
@@ -79,26 +77,11 @@ function hash(message) {
 //
 exports.chat_get = function (req, res){
     res.render("chat.html")
+    console.log('get chat')
 }
 
 exports.chat_post = function (req, res){
-    io.on('connection', function (socket) {
-        /**
-         * Log de connexion et de déconnexion des utilisateurs
-         */
-        console.log('a user connected');
-        socket.on('disconnect', function () {
-            console.log('user disconected');
-        });
-
-        /**
-         * Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
-         */
-        socket.on('chatgeneral-mesgeneral', function (message) {
-            console.log('message : ' + message.text);
-            io.emit('chatgeneral-mesgeneral', message);
-        });
-    });
+    console.log("TRY SEND SERVER")
 }
 
 //
@@ -140,3 +123,25 @@ exports.user_update_get = function(req, res) {
 exports.user_update_post = function(req, res) {
     res.send('NOT IMPLEMENTED: User update POST');
 };
+
+module.exports.app = app
+
+module.exports.sock = function (io){
+    io.on('connection', function (socket) {
+        /**
+         * Log de connexion et de déconnexion des utilisateurs
+         */
+        console.log('a user connected');
+        socket.on('disconnect', function () {
+            console.log('user disconected');
+        });
+
+        /**
+         * Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
+         */
+        socket.on('chatgeneral-mesgeneral', function (message) {
+            console.log('message : ' + message.text);
+            io.emit('chatgeneral-mesgeneral', message);
+        });
+    });
+}

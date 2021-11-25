@@ -25,8 +25,10 @@ router.get('/login', user_controller.user_login_get)
 // POST request for login
 router.post('/login', user_controller.user_login_post)
 
-//
+// GET request for chat
 router.get('/chat', user_controller.chat_get);
+
+// POST request for chat
 router.post('/chat', user_controller.chat_post);
 
 // GET request to delete User.

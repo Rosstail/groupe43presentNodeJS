@@ -5,6 +5,7 @@ var socket = io();
  * Envoi d'un message
  */
 $('#formgeneral').submit(function (e) {
+  console.log("TRY SEND CLIENT")
   e.preventDefault();
   var message = {
     text : $('#sendgeneral').val()
