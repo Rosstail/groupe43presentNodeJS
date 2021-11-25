@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+const mysql = require('mysql')
 
-var Schema = mongoose.Schema;
+var Schema = mysql.Schema;
 
 var UserSchema = new Schema(
   {
@@ -23,4 +23,5 @@ UserSchema.virtual('url').get(function () {
 });
 
 //Export model
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mysql.model('User', UserSchema)
+//module.exports = mongoose.model('User', UserSchema);

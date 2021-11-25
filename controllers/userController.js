@@ -1,6 +1,7 @@
-var User = require('../models/user');
+//var User = require('../models/user');
 const path = require('path');
-const crypto = require('crypto')
+const crypto = require('crypto');
+//const { con } = require('../app');
 
 //
 exports.index = function (req, res){
@@ -38,19 +39,31 @@ exports.user_create_post = function(req, res) {
         console.log("Respect the regex !")
     } else {
         console.log("Does not respect the regex")
+        return
     }
 
     if (password === confirmpassword) {
         console.log("Passwords are the same")
     } else {
         console.log("Passwords are not the same")
+        return
     }
 
     
     let hashpassword = test(password)
     //let hashpassword = md5sum.update(password).digest('hex')
+    /*let sql = `INSERT INTO users (\`firstname\`, \`lastname\`, \`email\`, \`password\`)
+    VALUES (${firstname},${name},${email},${hashpassword})`
+
+    console.log(sql)
+
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("Result : " + result)
+    })*/
 
     console.log("MDP Hash " + hashpassword)
+
     res.render("create_user.html")
 };
 
