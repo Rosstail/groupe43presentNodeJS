@@ -1,3 +1,4 @@
+/*
 const mysql = require('mysql')
 
 var Schema = mysql.Schema;
@@ -7,8 +8,7 @@ var UserSchema = new Schema(
     last_name: {type: String, required: true, maxLength: 50},
     first_name: {type: String, required: true, maxLength: 50},
     email: {type: String, required: true, maxLength: 100},
-    password: {type: String, required: true, maxLength: 200},
-    date_of_register: {type: Date},
+    password: {type: String, required: true, maxLength: 200}
   }
 );
 
@@ -23,5 +23,17 @@ UserSchema.virtual('url').get(function () {
 });
 
 //Export model
+const Users = mongoose.model('User', UserSchema);
+class users{
+  constructor(email, password, firstname, lastname){
+    this.firstname = firstname
+    this.lastname = lastname
+    this.email = email
+    this.password = password
+  }
+}
+    
+module.exports = users
 module.exports = mysql.model('User', UserSchema)
 //module.exports = mongoose.model('User', UserSchema);
+*/
