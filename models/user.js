@@ -1,43 +1,27 @@
-var mongoose = require('mongoose');
+const mysql = require('mysql')
 
-var Schema = mongoose.Schema;
+var Schema = mysql.Schema;
 
 var UserSchema = new Schema(
   {
+    last_name: {type: String, required: true, maxLength: 50},
     first_name: {type: String, required: true, maxLength: 50},
-    family_name: {type: String, required: true, maxLength: 50},
     email: {type: String, required: true, maxLength: 100},
-    password: {type: String, required: true, maxLength: 100},
-    date_of_birth: {type: Date},
+    password: {type: String, required: true, maxLength: 200},
+    date_of_register: {type: Date},
   }
 );
 
 // Virtual for user's full name
-UserSchema
-.virtual('name')
-.get(function () {
-  return this.family_name + ', ' + this.first_name;
-});
-
-// Virtual for users's lifespan
-UserSchema.virtual('lifespan').get(function() {
-  var lifetime_string = '';
-  if (this.date_of_birth) {
-    lifetime_string = DateTime.fromJSDate(this.date_of_birth).toLocaleString(DateTime.DATE_MED);
-  }
-  lifetime_string += ' - ';
-  if (this.date_of_death) {
-    lifetime_string += DateTime.fromJSDate(this.date_of_death).toLocaleString(DateTime.DATE_MED)
-  }
-  return lifetime_string;
+UserSchema.virtual('name').get(function () {
+  return this.last_name + ', ' + this.first_name;
 });
 
 // Virtual for user's URL
-UserSchema
-.virtual('url')
-.get(function () {
+UserSchema.virtual('url').get(function () {
   return '/catalog/author/' + this._id;
 });
 
 //Export model
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mysql.model('User', UserSchema)
+//module.exports = mongoose.model('User', UserSchema);
