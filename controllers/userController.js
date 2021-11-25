@@ -1,5 +1,7 @@
 const path = require('path');
 const crypto = require('crypto')
+let http = require('http').Server(exports);
+let io = require('socket.io')(http);
 
 const users = require('../models/user');
 const mysql = require('mysql');
@@ -50,7 +52,6 @@ exports.user_create_post = function(req, res) {
     let confirmpassword = req.body.confirmpassword
 
     console.log(name + " " + firstname + " " + email + " " + password + " " + confirmpassword)
-    
 
     if (password == confirmpassword) {
         if (password.match("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$")) {            
@@ -83,6 +84,31 @@ exports.user_create_post = function(req, res) {
 
 function hash(message) {
     return crypto.createHash("sha256").update(message).digest("hex")
+}
+
+//
+exports.chat_get = function (req, res){
+    res.render("chat.html")
+}
+
+exports.chat_post = function (req, res){
+    io.on('connection', function (socket) {
+        /**
+         * Log de connexion et de déconnexion des utilisateurs
+         */
+        console.log('a user connected');
+        socket.on('disconnect', function () {
+            console.log('user disconected');
+        });
+
+        /**
+         * Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
+         */
+        socket.on('chatgeneral-mesgeneral', function (message) {
+            console.log('message : ' + message.text);
+            io.emit('chatgeneral-mesgeneral', message);
+        });
+    });
 }
 
 //

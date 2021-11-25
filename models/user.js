@@ -1,7 +1,7 @@
 /*
-var mongoose = require('mongoose');
+const mysql = require('mysql')
 
-var Schema = mongoose.Schema;
+var Schema = mysql.Schema;
 
 var UserSchema = new Schema(
   {
@@ -24,7 +24,6 @@ UserSchema.virtual('url').get(function () {
 
 //Export model
 const Users = mongoose.model('User', UserSchema);
-*/
 class users{
   constructor(email, password, firstname, lastname){
     this.firstname = firstname
@@ -35,3 +34,6 @@ class users{
 }
     
 module.exports = users
+module.exports = mysql.model('User', UserSchema)
+//module.exports = mongoose.model('User', UserSchema);
+*/
