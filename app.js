@@ -2,6 +2,7 @@ const express = require('express')
 const userRouter = require('./routes/userRouter');
 const config = require('./config');
 const nunjucks = require('nunjucks')
+var connexion = require('./db_handler')
 
 const app = express()
 const port = config.webPort

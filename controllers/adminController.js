@@ -2,7 +2,9 @@
 const path = require('path');
 const crypto = require('crypto')
 const config = require('../config');
-const mysql = require('mysql')
+const mysql = require('mysql');
+const connexion = require('../db_handler')
+
 
 exports.admin_get = function(req, res) {
     res.render('admin/admin_research_user.html')
@@ -24,10 +26,11 @@ exports.admin_create_post = function(req, res) {
     let confirmpassword = req.body.confirmpassword
     let role = req.body.role
 
-    /*if (request(`SELECT \`email\` FROM \`users\` WHERE \`email\` = "${email}"`)) {
+    let test = connexion.request(`SELECT \`email\` FROM \`users\` WHERE \`email\` = "${email}"`)
+    if (test) {
         console.log("CLONE")
         return
-    }*/
+    }
 
     if (password !== confirmpassword ) {
         return
@@ -39,32 +42,8 @@ exports.admin_create_post = function(req, res) {
     }
     let sqlreq = `INSERT INTO \`users\` (\`firstname\`, \`lastname\`, \`email\`, \`password\`, \`level\`)
     VALUES ("${firstname}","${name}","${email}","${password}","${role}")`
-    console.log(request(sqlreq))
+
+    let insert = connexion.request(sqlreq)
+    console.log(insert)
     res.render('admin/admin_create_user.html')
-}
-
-async function request(sqlreq) {
-    // Connection BDD
-    const con = mysql.createConnection({
-        host: config.db_host,
-        user: config.db_user,
-        password: config.db_password,
-        database: config.db_database
-    });
-
-    con.connect(function(err) {
-        if (err) {
-            con.end()
-            throw err
-        }
-    });
-
-    con.query(sqlreq, function (err, result) {
-        if (err) {
-            con.end()
-            throw err
-        }
-        con.end()
-        return result
-    })
 }
