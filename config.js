@@ -10,4 +10,4 @@ config.db_user = process.env.SQL_USER
 config.db_password = process.env.SQL_PASSWORD
 config.db_database = process.env.SQL_DATABASE
 
-module.exports = config;
+module.exports = config

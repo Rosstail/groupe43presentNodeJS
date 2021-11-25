@@ -1,7 +1,7 @@
 const express = require('express')
 const userRouter = require('./routes/userRouter');
-const config = require('./config');
 const nunjucks = require('nunjucks')
+const config = require('./config');
 var connexion = require('./db_handler')
 
 const app = express()
