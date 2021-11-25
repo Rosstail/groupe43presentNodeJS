@@ -1,6 +1,8 @@
 var User = require('../models/user');
 const path = require('path');
 const crypto = require('crypto')
+let http = require('http').Server(exports);
+let io = require('socket.io')(http);
 
 //
 exports.index = function (req, res){
@@ -54,8 +56,28 @@ exports.user_create_post = function(req, res) {
 };
 
 //
-exports.chat = function (req, res){
+exports.chat_get = function (req, res){
     res.render("chat.html")
+}
+
+exports.chat_post = function (req, res){
+    io.on('connection', function (socket) {
+        /**
+         * Log de connexion et de déconnexion des utilisateurs
+         */
+        console.log('a user connected');
+        socket.on('disconnect', function () {
+            console.log('user disconected');
+        });
+
+        /**
+         * Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
+         */
+        socket.on('chatgeneral-mesgeneral', function (message) {
+            console.log('message : ' + message.text);
+            io.emit('chatgeneral-mesgeneral', message);
+        });
+    });
 }
 
 //
