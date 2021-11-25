@@ -1,7 +1,7 @@
 var User = require('../models/user');
 const path = require('path');
 const crypto = require('crypto')
-let http = require('http').Server(exports);
+let http = require('../http').Server(exports);
 let io = require('socket.io')(http);
 
 //
