@@ -1,4 +1,4 @@
-var User = require('../models/user');
+//var User = require('../models/user');
 const path = require('path');
 const crypto = require('crypto')
 let http = require('../http').Server(exports);
@@ -27,7 +27,6 @@ exports.user_create_get = function(req, res) {
 
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
-    const md5sum = crypto.createHash('md5');
 
     let name = req.body.name
     let firstname = req.body.firstname
@@ -41,19 +40,36 @@ exports.user_create_post = function(req, res) {
         console.log("Respect the regex !")
     } else {
         console.log("Does not respect the regex")
+        return
     }
 
     if (password === confirmpassword) {
         console.log("Passwords are the same")
     } else {
         console.log("Passwords are not the same")
+        return
     }
 
-    let hashpassword = md5sum.update(password).digest('hex')
+    
+    let hashpassword = test(password)
+    /*let sql = `INSERT INTO users (\`firstname\`, \`lastname\`, \`email\`, \`password\`)
+    VALUES (${firstname},${name},${email},${hashpassword})`
 
-    console.log(hashpassword)
+    console.log(sql)
+
+    con.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("Result : " + result)
+    })*/
+
+    console.log("MDP Hash " + hashpassword)
+
     res.render("create_user.html")
 };
+
+function test(message) {
+    return crypto.createHash("sha256").update(message).digest("hex")
+}
 
 //
 exports.chat_get = function (req, res){

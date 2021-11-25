@@ -3,6 +3,7 @@ var router = express.Router();
 
 // Require controller modules.
 var user_controller = require('../controllers/userController');
+var admin_controller = require('../controllers/adminController');
 
 /// USER ROUTES ///
 
@@ -42,5 +43,17 @@ router.post('/account/:id/update', user_controller.user_update_post);
 
 // GET request for one User.
 router.get('/account/:id', user_controller.user_detail);
+
+//GET request  for admin
+router.get('/admin', admin_controller.admin_get)
+
+//GET request  for admin
+router.post('/admin', admin_controller.admin_get)
+
+//GET request  for admin
+router.get('/admin/create', admin_controller.admin_create_get)
+
+//GET request  for admin
+router.post('/admin/create', admin_controller.admin_create_post)
 
 module.exports = router;
