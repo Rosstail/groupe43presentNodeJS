@@ -18,5 +18,8 @@
     "nodemon": "^2.0.15",
     "nunjucks": "^3.2.3",
     "status": "^0.0.13"
+  },
+  "devDependencies": {
+    "socket.io": "^4.4.0"
   }
 }

@@ -54,6 +54,11 @@ exports.user_create_post = function(req, res) {
 };
 
 //
+exports.chat = function (req, res){
+    res.render("chat.html")
+}
+
+//
 exports.user_login_get = function(req, res) {
     res.render("login_user.html")
 };
