@@ -25,7 +25,6 @@ exports.user_create_get = function(req, res) {
 
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
-    const md5sum = crypto.createHash('md5');
 
     let name = req.body.name
     let firstname = req.body.firstname
@@ -47,11 +46,17 @@ exports.user_create_post = function(req, res) {
         console.log("Passwords are not the same")
     }
 
-    let hashpassword = md5sum.update(password).digest('hex')
+    
+    let hashpassword = test(password)
+    //let hashpassword = md5sum.update(password).digest('hex')
 
-    console.log(hashpassword)
+    console.log("MDP Hash " + hashpassword)
     res.render("create_user.html")
 };
+
+function test(message) {
+    return crypto.createHash("sha256").update(message).digest("hex")
+}
 
 //
 exports.user_login_get = function(req, res) {
