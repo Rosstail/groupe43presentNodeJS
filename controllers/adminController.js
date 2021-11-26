@@ -8,20 +8,21 @@ const db_handler = require('../db_handler');
 const connexion = db_handler.connexion
 
 
-exports.admin_get = function(req, res) {
-    is_user_admin(res, 12, 'admin/admin_crud.html')
+exports.admin_get = function(req, res, next) {
+    res.render('admin/admin_crud.html')
+    next()
 }
 
-exports.admin_post = function(req, res) {
-    is_user_admin(res, 12, 'admin/admin_crud.html')
+exports.admin_post = function(req, res, next) {
+    next()
 }
 
-exports.admin_create_get = function(req, res) {
-    is_user_admin(res, 12, 'admin/admin_create_user.html')
+exports.admin_create_get = function(req, res, next) {
+    res.render('admin/admin_create_user.html')
+    next()
 }
 
-exports.admin_create_post = function(req, res) {
-    is_user_admin(res, 12, 'admin/admin_create_user.html')
+exports.admin_create_post = function(req, res, next) {
     let firstname = req.body.firstname
     let name = req.body.name
     let email = req.body.email
@@ -45,7 +46,7 @@ exports.admin_create_post = function(req, res) {
                 if(err){
                     if (err.code == "ER_DUP_ENTRY"){                       
                         console.log('AJOUT ERREUR EMAIL ALREADY EXIT')
-                        res.redirect('./create')
+                        res.render('./admin/create')
                     }               
                     else{
                         throw err
@@ -53,8 +54,7 @@ exports.admin_create_post = function(req, res) {
 
                 }else{
                     console.log("User created : ");
-                    res.redirect('./login')
-                }                
+                }
                     
             })
             console.log("The password respect the regex !")
@@ -67,30 +67,48 @@ exports.admin_create_post = function(req, res) {
     else {
         console.log("Passwords are not the same")
     }
+    next()
 }
 
-exports.admin_edit_get = function(req, res) {
-    is_user_admin(res, 12, 'admin/admin_edit_user.html')
+exports.admin_edit_get = function(req, res, next) {
+    console.log("ID GET = " + req.query.id)
+    res.render('admin/admin_edit_user.html')
+    //get_user_data_from_email(res, req.body.email, next)
 }
 
-exports.admin_edit_post = function(req, res) {
-    is_user_admin(res, 12, 'admin/admin_edit_user.html')
+exports.admin_edit_post = function(req, res, next) {
+    //res.render('admin/admin_edit_user.html?')
+    get_user_data_from_email(res, req.body.email, next)
 }
 
 function hash(message) {
     return crypto.createHash("sha256").update(message).digest("hex")
 }
 
-function is_user_admin(res, id, link) {
-    connexion.query("SELECT level FROM itescia.users WHERE ID = '" + id + "'", function (err, result) {
+exports.is_user_admin = function(res, id, next) {
+    connexion.query("SELECT level FROM itescia.users WHERE id = '" + id + "'", function (err, result) {
         if (err) throw err;
-        if(1 != result[0].level){
+        if(1 != result[0].level) {
             console.log('Not admin')
             res.redirect('./')
         } else {
-            console.log("Admin access granted.")
-            //res.redirect(link)
-            res.render(link)
+            next()
         }
+    });
+}
+
+function get_user_data_from_email(res, email, next) {
+    connexion.query("SELECT id, lastname, firstname, email, level FROM itescia.users WHERE email = '" + email + "'", function (err, result) {
+        if (err) throw err;
+        let data = {
+            id: result[0].id,
+            name: result[0].lastname,
+            firstname: result[0].firstname,
+            email: result[0].email,
+            level: result[0].level,
+        }
+        //res.render('admin/admin_edit_user.html')
+        res.redirect('./edit/?id=' + data.id)
+        next()
     });
 }

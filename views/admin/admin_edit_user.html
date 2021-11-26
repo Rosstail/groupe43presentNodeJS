@@ -4,10 +4,6 @@
     <title>Edit User</title>
     <meta charset="UTF-8">
     <meta lang="FR">
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io()
-    </script>
 </head>
 <body>
     <h2>Edit User</h2>
@@ -33,5 +29,38 @@
             <input id="delete" type="submit" value="Supprimer utilisateur">
         </div>
     </form>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="test.js"></script>
+    <script>
+        let data = {
+            name: "Philippe",
+            firstname: "Jean",
+            email: "jean@philippe.fr",
+            level: true
+        }
+
+        function displayData()
+        {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const id = urlParams.get('id')
+            console.log(id)
+
+            let name = document.getElementById("name");
+            let firstname = document.getElementById("firstname");
+            let email = document.getElementById("email");
+            let is_admin = document.getElementById("role");
+
+            if (data) {
+                name.value = data["name"]
+                firstname.value = data["firstname"]
+                email.value = data["email"]
+                is_admin.checked = data["level"]
+            }
+        }
+
+        displayData(data)
+    </script>
 </body>
 </html>
