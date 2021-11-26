@@ -38,21 +38,63 @@ router.post('/account/:id/update', user_controller.user_update_post);
 router.get('/account/:id', user_controller.user_detail);
 
 //GET request  for admin
-router.get('/admin', admin_controller.admin_get)
+router.get('/admin',
+    function(req, res, next) {
+        admin_controller.is_user_admin(res, 12, next)
+    },
+    function(req, res, next) {
+        admin_controller.admin_get(req, res, next)
+    }
+);
 
 //GET request  for admin
-router.post('/admin', admin_controller.admin_post)
+router.post('/admin',
+    function(req, res, next) {
+        admin_controller.is_user_admin(res, 12, next)
+    },
+    function(req, res, next) {
+        admin_controller.admin_post(req, res, next)
+    }
+)
 
 //GET request  for admin
-router.get('/admin/create', admin_controller.admin_create_get)
+router.get('/admin/create',
+    function(req, res, next) {
+        admin_controller.is_user_admin(res, 12, next)
+    },
+    function(req, res, next) {
+        admin_controller.admin_create_get(req, res, next)
+    }
+)
 
 //GET request  for admin
-router.post('/admin/create', admin_controller.admin_create_post)
+router.post('/admin/create',
+    function(req, res, next) {
+        admin_controller.is_user_admin(res, 12, next)
+    },
+    function(req, res, next) {
+        admin_controller.admin_create_post(req, res, next)
+    }
+)
 
 //GET request  for admin
-router.get('/admin/edit', admin_controller.admin_edit_get)
+router.get('/admin/edit/',
+    function(req, res, next) {
+        admin_controller.is_user_admin(res, 12, next)
+    },
+    function(req, res, next) {
+        admin_controller.admin_edit_get(req, res, next)
+    }
+)
 
 //GET request  for admin
-router.post('/admin/edit', admin_controller.admin_edit_post)
+router.post('/admin/edit/',
+    function(req, res, next) {
+        admin_controller.is_user_admin(res, 12, next)
+    },
+    function(req, res, next) {
+        admin_controller.admin_edit_post(req, res, next)
+    }
+)
 
 module.exports = router;
