@@ -41,6 +41,16 @@ io.on('connection', function (socket) {
     console.log('message : ' + message.text);
     io.emit('chatgeneral-mesgeneral', message);
   });
+
+  socket.on('chatgeneral-mesgame', function (message) {
+    console.log('message : ' + message.text);
+    io.emit('chatgeneral-mesgame', message);
+  });
+
+  socket.on('chatgeneral-meswork', function (message) {
+    console.log('message : ' + message.text);
+    io.emit('chatgeneral-meswork', message);
+  });
 });
 
 http.listen(3000, function () {
