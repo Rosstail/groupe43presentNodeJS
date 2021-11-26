@@ -30,7 +30,7 @@ exports.user_create_get = function(req, res) {
     //res.sendFile('/views/create_user.html', {root: path.dirname(__dirname)});
 };
 
-    
+
 // Handle User create on POST.
 exports.user_create_post = function(req, res) {
     let name = req.body.name
@@ -39,33 +39,33 @@ exports.user_create_post = function(req, res) {
     let password = req.body.password
     let confirmpassword = req.body.confirmpassword
 
-    console.log(name + " " + firstname + " " + email + " " + password + " " + confirmpassword)
+    //console.log(name + " " + firstname + " " + email + " " + password + " " + confirmpassword)
 
     if (password == confirmpassword) {
-        if (password.match("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$")) {            
+        if (password.match("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,20}$")) {
             let hashpassword = hash(password)
             connexion.query("INSERT INTO itescia.users (firstname, lastname, email, password) VALUES ('"+ firstname +"', '"+ name +"', '"+ email +"', '"+ hashpassword +"')", function(err, result){
                 if(err){
-                    if (err.code == "ER_DUP_ENTRY"){                       
+                    if (err.code == "ER_DUP_ENTRY"){
                         console.log('AJOUT ERREUR EMAIL ALREADY EXIT')
                         res.redirect('./create')
-                    }               
+                    }
                     else{
                         throw err
-                    }   
+                    }
 
                 }else{
-                    console.log("User created : ");
+                    console.log("User created");
                     res.redirect('./login')
-                }                
-                    
+                }
+
             })
             console.log("The passwrd respect the regex !")
-        } 
+        }
         else
             console.log("Does not respect the regex")
         console.log("Passwords are the same")
-    } 
+    }
     else
         console.log("Passwords are not the same")
 };
@@ -74,7 +74,38 @@ function hash(message) {
     return crypto.createHash("sha256").update(message).digest("hex")
 }
 
-//
+exports.chat_get = function (req, res){
+    res.render("chat.html")
+}
+
+exports.chat_post = function (req, res){
+    connexion.query("SELECT token FROM itescia.users WHERE token = '"+ req.session.token +"'", (err, result => {
+        if(err) throw err
+
+        if(result[0].token != ""){
+            io.on('connection', function (socket) {
+                /**
+                 * Log de connexion et de déconnexion des utilisateurs
+                 */
+                console.log('a user connected');
+                socket.on('disconnect', function () {
+                    console.log('user disconected');
+                });
+
+                /**
+                 * Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
+                 */
+                socket.on('chatgeneral-mesgeneral', function (message) {
+                    console.log('message : ' + message.text);
+                    io.emit('chatgeneral-mesgeneral', message);
+                });
+            });
+        }
+        else
+            res.redirect('./login')
+    }))
+}
+
 exports.user_login_get = function(req, res) {
     res.render("login_user.html")
 };
@@ -82,14 +113,35 @@ exports.user_login_get = function(req, res) {
 exports.user_login_post = function(req, res) {
     let email = req.body.email
     let password = req.body.password
-      
+
     connexion.query("SELECT email, password FROM itescia.users WHERE email = '" + email + "'", function (err, result) {
+        console.log("result : " + result)
         if (err) throw err;
-        if(hash(password) == result[0].password){
-            console.log('user logged')
-            res.redirect('./chat')
-        }else{
-            console.log('error')
+        if(result !== null){
+            console.log('ok')
+            if(hash(password) == result[0].password){
+                console.log('user logged')
+
+                var token = ""
+
+                crypto.randomBytes(48, function(err, buffer){
+                    token = buffer.toString('hex')
+                })
+
+                connexion.query("UPDATE itescia.users SET token = '"+ token +"' WHERE email = '" + email + "'", function (err, result){
+                    if(err) throw err
+                })
+
+                req.session.token = token
+                res.redirect('./')
+            }else{
+                console.log('error')
+                res.redirect('./login')
+            }
+        }
+        else{
+            console.log('email non trouvé')
+            res.redirect('./login')
         }
     });
 };
