@@ -16,9 +16,6 @@ router.get('/create', user_controller.user_create_get);
 // POST request for creating User.
 router.post('/create', user_controller.user_create_post);
 
-// GET request for list of all User.
-router.get('/user_list', user_controller.user_list);
-
 // GET request for login.
 router.get('/login', user_controller.user_login_get)
 
