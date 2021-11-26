@@ -46,7 +46,7 @@ $('#formgame').submit(function (e) {
  * Réception d'un message
  */
 socket.on('chatgeneral-mesgame', function (message) {
-  $('#mesgame').append($('<li>').text(message.text));
+  $('#mesgame').append($('<li>').html('<span class="username">' + message.username + '</span> ' + message.text));
 });
 
 
@@ -69,5 +69,5 @@ $('#formwork').submit(function (e) {
  * Réception d'un message
  */
 socket.on('chatgeneral-meswork', function (message) {
-  $('#meswork').append($('<li>').text(message.text));
+  $('#meswork').append($('<li>').html('<span class="username">' + message.username +'</span> ' + message.text));
 });
