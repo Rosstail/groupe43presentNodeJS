@@ -41,12 +41,18 @@ router.get('/account/:id', user_controller.user_detail);
 router.get('/admin', admin_controller.admin_get)
 
 //GET request  for admin
-router.post('/admin', admin_controller.admin_get)
+router.post('/admin', admin_controller.admin_post)
 
 //GET request  for admin
 router.get('/admin/create', admin_controller.admin_create_get)
 
 //GET request  for admin
 router.post('/admin/create', admin_controller.admin_create_post)
+
+//GET request  for admin
+router.get('/admin/edit', admin_controller.admin_edit_get)
+
+//GET request  for admin
+router.post('/admin/edit', admin_controller.admin_edit_post)
 
 module.exports = router;

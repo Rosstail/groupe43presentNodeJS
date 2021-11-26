@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit User</title>
+    <meta charset="UTF-8">
+    <meta lang="FR">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io()
+    </script>
+</head>
+<body>
+    <h2>Edit User</h2>
+    <form method="post">
+        <div>
+            <p>Lastname</p>
+            <input name="name" id="name" type="text">
+            <p>Firstname</p>
+            <input name="firstname" id="firstname" type="text">
+        </div>
+        <div>
+            <p>Mail Address</p>
+            <input name="email" id="email" type="email">
+            <p>Password</p>
+            <input name="password" id="password" type="password">
+            <p>Repeat Password</p>
+            <input name="confirmpassword" id="confirmpassword" type="password">
+            <p>Admin ?</p>
+            <input name="role" id="role" type="checkbox">
+        </div>
+        <div>
+            <input id="update" type="submit" value="Editer utilisateur">
+            <input id="delete" type="submit" value="Supprimer utilisateur">
+        </div>
+    </form>
+</body>
+</html>
