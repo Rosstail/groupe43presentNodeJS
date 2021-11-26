@@ -43,16 +43,8 @@ io.on('connection', function (socket) {
   });
 });
 
-/*
-app.listen(port, host, () => {
-  console.log(`Server running at ${protocol}://${host}:${port}/`);
-});*/
-
 http.listen(3000, function () {
-  console.log('Server is listening on *:3000');
+  console.log(`Server running at ${protocol}://${host}:${port}/`);
 });
-
-//app.get('/user', userRouter);
-//app.use('/catalog', catalogRouter);  // Add catalog routes to middleware chain.
 
 module.exports = app;
