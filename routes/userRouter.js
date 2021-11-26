@@ -48,7 +48,7 @@ router.get('/account/:id', user_controller.user_detail);
 router.get('/admin', admin_controller.admin_get)
 
 //GET request  for admin
-router.post('/admin', admin_controller.admin_get)
+router.post('/admin', admin_controller.admin_post)
 
 //GET request  for admin
 router.get('/admin/create', admin_controller.admin_create_get)
