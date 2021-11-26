@@ -19,6 +19,9 @@ $('#formgeneral').submit(function (e) {
 /**
  * Réception d'un message
  */
+// socket.on('chatgeneral-mesgeneral', function (message) {
+//   $('#mesgeneral').append($('<li>').text(message.text));
+// })
 socket.on('chatgeneral-mesgeneral', function (message) {
-  $('#mesgeneral').append($('<li>').text(message.text));
+  $('#mesgeneral').append($('<li>').html('<span class="username">' + message.username + '</span> ' + message.text));
 });

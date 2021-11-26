@@ -9,6 +9,11 @@ var io = require('socket.io')(http);
 app.use("/chat", express.static(__dirname + "/views/chat.html"));
 
 io.on('connection', function (socket) {
+  var loggedUser;
+  socket.on('user-login', function (loggedUser) {
+    console.log('user logged in : ' + loggedUser.username);
+    user = loggedUser;
+  });
   /**
    * Log de connexion et de déconnexion des utilisateurs
    */
@@ -20,7 +25,12 @@ io.on('connection', function (socket) {
   /**
    * Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
    */
+  // socket.on('chatgeneral-mesgeneral', function (message) {
+  //   console.log('message : ' + message.text);
+  //   io.emit('chatgeneral-mesgeneral', message);
+  // });
   socket.on('chatgeneral-mesgeneral', function (message) {
+    message.username = loggedUser.username; // On intègre ici le nom d'utilisateur au message
     console.log('message : ' + message.text);
     io.emit('chatgeneral-mesgeneral', message);
   });
