@@ -34,9 +34,6 @@ router.get('/account/:id/update', user_controller.user_update_get);
 // POST request to update User.
 router.post('/account/:id/update', user_controller.user_update_post);
 
-// GET request for one User.
-router.get('/account/:id', user_controller.user_detail);
-
 //GET request  for admin
 router.get('/admin', admin_controller.admin_get)
 
