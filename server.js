@@ -25,13 +25,14 @@ io.on('connection', function (socket) {
   /**
    * Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
    */
-  // socket.on('chatgeneral-mesgeneral', function (message) {
-  //   console.log('message : ' + message.text);
-  //   io.emit('chatgeneral-mesgeneral', message);
-  // });
+  socket.on('chatgeneral-mesgeneral', function (message) {
+    console.log('message : ' + message.text);
+    io.emit('chatgeneral-mesgeneral', message);
+  });
   socket.on('chatgeneral-mesgeneral', function (message) {
     message.username = loggedUser.username; // On intègre ici le nom d'utilisateur au message
     console.log('message : ' + message.text);
+
     io.emit('chatgeneral-mesgeneral', message);
   });
 });
