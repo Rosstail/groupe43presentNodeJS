@@ -9,11 +9,11 @@ const connexion = db_handler.connexion
 
 
 exports.admin_get = function(req, res) {
-    is_user_admin(res, 12, 'admin/admin_research_user.html')
+    is_user_admin(res, 12, 'admin/admin_crud.html')
 }
 
 exports.admin_post = function(req, res) {
-    is_user_admin(res, 12, 'admin/admin_research_user.html')
+    is_user_admin(res, 12, 'admin/admin_crud.html')
 }
 
 exports.admin_create_get = function(req, res) {
@@ -67,6 +67,14 @@ exports.admin_create_post = function(req, res) {
     else {
         console.log("Passwords are not the same")
     }
+}
+
+exports.admin_edit_get = function(req, res) {
+    is_user_admin(res, 12, 'admin/admin_edit_user.html')
+}
+
+exports.admin_edit_post = function(req, res) {
+    is_user_admin(res, 12, 'admin/admin_edit_user.html')
 }
 
 function hash(message) {

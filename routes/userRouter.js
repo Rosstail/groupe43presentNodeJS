@@ -56,4 +56,10 @@ router.get('/admin/create', admin_controller.admin_create_get)
 //GET request  for admin
 router.post('/admin/create', admin_controller.admin_create_post)
 
+//GET request  for admin
+router.get('/admin/edit', admin_controller.admin_edit_get)
+
+//GET request  for admin
+router.post('/admin/edit', admin_controller.admin_edit_post)
+
 module.exports = router;
