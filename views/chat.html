@@ -67,6 +67,15 @@
     }
   }
 </script>
+<script>
+    if (sessionStorage.getItem('status') != null){
+        console.log("vous êtes log");
+    }
+    else{
+        console.log("error log");
+        //redirect user to login page
+    }
+</script>
 <style>
   .ti{
     display: flex;
