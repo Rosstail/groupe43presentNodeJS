@@ -16,18 +16,11 @@ router.get('/create', user_controller.user_create_get);
 // POST request for creating User.
 router.post('/create', user_controller.user_create_post);
 
-// GET request for list of all User.
-router.get('/user_list', user_controller.user_list);
-
 // GET request for login.
 router.get('/login', user_controller.user_login_get)
 
 // POST request for login
 router.post('/login', user_controller.user_login_post)
-
-//
-router.get('/chat', user_controller.chat_get);
-router.post('/chat', user_controller.chat_post);
 
 // GET request to delete User.
 router.get('/account/:id/delete', user_controller.user_delete_get);
